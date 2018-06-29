@@ -1,0 +1,2 @@
+# StingProject
+manipulation of strings
