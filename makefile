@@ -16,4 +16,4 @@ utility.o: utility.c utility.h
 	$(CC) -c utility.c
 
 clean:
-	-rm *.o $(OBJECTS)
+	-rm *.o
