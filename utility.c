@@ -32,7 +32,7 @@ void command_interpreter(const char *command){
     }
     else if(strncmp(command, "delete", 6) == 0){
         //do what you want with delete command >> delete <pos1, postn2,....,postnn> from <string>
-        strtok((char *)command, " ");           //discard the delete worf from the command
+        strtok((char *)command, " ");           //discard the delete word from the command
 
         char *postions_string = strtok(NULL, " ");   //extract the positions string "<pos1, postn2,....,postnn>""
 
@@ -48,19 +48,18 @@ void command_interpreter(const char *command){
         if(strncmp(from_keyword, "from", 4) == 0){
             /* extract the positions specified in <pos1, postn2,....,postnn> and */
             token = strtok(postions_string, ",");
-            positions[index] = atoi(token);
+
             while(token != NULL) {
+
                 //convert the token to an int if it is a digit
-               /*  if(is_anumber(token)){           //****************fix this
+                if(is_anumber(token)){           //****************fix this
                     positions[index] = atoi(token);
-                    debug();
                     ++index;                    //go to next position
                 }
                 else{
                     print_error("wrong arguments in the command", WRONG_ARGUMENTS);
                     return;                         //if any of the argumens is wrong, return (do not process other arguments)
-                } */
-                printf(">> %s", token);
+                }
                 NEW_LINE;
                 token = strtok(NULL, ",");
             }
@@ -139,26 +138,27 @@ void print_error(char *error_msg, char *error_type){
     it returns 1(true) if all the characters in the string are numbers or 0 (false) if at least one of the characters in the string 
     is not a number
 */
-int is_anumber(char str[]){
+int is_anumber(char *str){
     int counter = 0;
     int isDigit = 0;
-
-    while(counter < strlen(str)){
-
-        if(isdigit(str[counter])){
-            isDigit = 1;
-        }
-        else{
-            isDigit = 0;
-            print_error(WRONG_ARGUMENTS,"The entered argument is not a number");
-            return isDigit;
-        }
-        ++counter;
-    }
+	/*	loop through the string 'str' and if a character at any position is not a number return false (0)
+		otherwise if all the characters in the str are numbers return true (1) 
+	*/
+	do{
+		if(isdigit(*str)){
+			isDigit = 1;		//the char at this position is a number (true)
+		}
+		else{
+			isDigit = 0;		//the char at this position is not a number (false)
+		}
+		*str++;
+		++counter;
+	}while((isDigit == 1) && (*str != '\0'));	
 
     return isDigit;
 }
 
+/* to beremoved */
 void debug(void){
     printf("####> I havefailed ### \n");
 }
