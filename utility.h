@@ -13,6 +13,9 @@
 */
 #define NEW_LINE {printf("\n");}                //new line macro
 
+#define UNKNOWN_COMMAND "UNKNOWN COMMAND "     //unknown command macro
+#define WRONG_ARGUMENTS "WRONG ARGUMENTS "      //wrong arguments macro
+
 /*
     ######################################################################################################################
                                                     FUNCTION PROTOTYPES
@@ -32,11 +35,12 @@ void command_interpreter(const char *command);
 */
 void print_message(char *message);
 
-/* 	function to print error message on the terminal
-    it takes a pointer to the character string to be pronted to the terminal
+/* 	function to print error message on the terminal 
+    it takes a pointer to the character string to be printed to the terminal
+    and a pointer to the character string having the error type 'error_type'
     it ruturns nothing
 */
-void print_error(char *error_msg);
+void print_error(char *error_msg, char *error_type);
 
 /* 
     function to print the prompt and capture the command from the terminal
@@ -51,5 +55,17 @@ const char *prompt(char buffer[]);
     it returns nothing
 */
 void print_help_menu(void);
+
+
+/*
+    Function to check if the entered string is a number, it looks at each character in the string entered, when it encounters a 
+    character that is not a number, it returns 0 (false)
+    it takes a string 'str' to be checked if it is a number
+    it returns 1 if all the characters in the string are numbers or 0 (false) if at least one of the characters in the string 
+    is not a number
+*/
+int is_anumber(char str[]);
+
+void debug(void);   //to be removed
 
 #endif

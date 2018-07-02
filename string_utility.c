@@ -106,7 +106,7 @@ char *delete_characters(char *str, int positions[], int pos_size){
 
 /* 	function to replace a specified character from the string with another supplied character 'new_char'
 	returns the string 'str' with the character at 'position' replaced with 'new_char'
-     and or NULL when pos > length of str
+    and or NULL when pos > length of str
 */
 char *replace_character(char *str, unsigned char new_char, int position){
     char buffer[strlen(str)];		//create a buffer of the same size as the string where u want to store the characters that you need

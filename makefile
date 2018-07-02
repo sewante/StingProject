@@ -1,3 +1,9 @@
+#
+#   This file is part of the String Manipulation program, 
+#   its a make file for compiling the string manipulation program
+#
+#   File name: makefile
+#
 
 OBJECTS = main.o string_utility.o utility.o
 CC = gcc

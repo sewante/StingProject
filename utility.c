@@ -8,10 +8,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "utility.h"
 
-char *token;        //the token extracted from the command
 
 /* 	function to interprete the commands typed at the terminal
     it takes the a pointer to the constant character string to be interpreted
@@ -34,10 +34,42 @@ void command_interpreter(const char *command){
         //do what you want with delete command >> delete <pos1, postn2,....,postnn> from <string>
         strtok((char *)command, " ");           //discard the delete worf from the command
 
-        //obatin the remainder of the command>> <pos1, postn2,....,postnn> from <string>
-        while(token = strtok(NULL, " ")){
-            print_message(token);
-            NEW_LINE;
+        char *postions_string = strtok(NULL, " ");   //extract the positions string "<pos1, postn2,....,postnn>""
+
+        //********fix this error if only delete is typed
+
+        char *from_keyword = strtok(NULL, " ");     //extract the from keyword "from"
+        char *string = strtok(NULL," ");           //extract the string from which the characters are to be deleted "<string>"
+
+        int positions[strlen(postions_string)];   //the array to contain the converted positions from string to int
+        char *token;                              //token extracted
+        int index = 0;                            //index to go through the positions[]
+        //ensure that the from keyword is in the typed command
+        if(strncmp(from_keyword, "from", 4) == 0){
+            /* extract the positions specified in <pos1, postn2,....,postnn> and */
+            token = strtok(postions_string, ",");
+            positions[index] = atoi(token);
+            while(token != NULL) {
+                //convert the token to an int if it is a digit
+               /*  if(is_anumber(token)){           //****************fix this
+                    positions[index] = atoi(token);
+                    debug();
+                    ++index;                    //go to next position
+                }
+                else{
+                    print_error("wrong arguments in the command", WRONG_ARGUMENTS);
+                    return;                         //if any of the argumens is wrong, return (do not process other arguments)
+                } */
+                printf(">> %s", token);
+                NEW_LINE;
+                token = strtok(NULL, ",");
+            }
+            for(index = 0; index < 3; ++index){
+                printf(">> %i, ",positions[index]);
+            }
+        }
+        else{
+            print_error((char *)command, UNKNOWN_COMMAND);
         }
 
     }
@@ -55,13 +87,12 @@ void command_interpreter(const char *command){
         //do what you want with exit command
         NEW_LINE;
         print_message("Bye...");
+        NEW_LINE;
         exit(EXIT_SUCCESS);             //exit the program
     }
     //* In case of unsupported command 
     else{
-        NEW_LINE;
-        printf(" UNKNOWN COMMAND \" %s \" Type help to see the list of permitted commands!", command);
-        NEW_LINE;
+        print_error((char *)command, UNKNOWN_COMMAND);   //print error message
     }
     
 }
@@ -88,4 +119,46 @@ const char *prompt(char buffer[]){
 void print_message(char *message){
     NEW_LINE;
     printf(" MESSAGE: %s",message);
+}
+
+/* 	function to print error message on the terminal 
+    it takes a pointer to the character string to be printed to the terminal
+    and a pointer to the character string having the error type 'error_type'
+    it ruturns nothing
+*/
+void print_error(char *error_msg, char *error_type){
+
+    NEW_LINE;
+    printf(" ERROR: %s> \" %s \", Type help to see the list of permitted commands!",error_type, error_msg);
+    NEW_LINE;
+}
+/*
+    Function to check if the entered string is a number, it looks at each character in the string entered, 
+    when it encounters a character that is not a number, it returns 0 (false)
+    it takes a string 'str' to be checked if it is a number
+    it returns 1(true) if all the characters in the string are numbers or 0 (false) if at least one of the characters in the string 
+    is not a number
+*/
+int is_anumber(char str[]){
+    int counter = 0;
+    int isDigit = 0;
+
+    while(counter < strlen(str)){
+
+        if(isdigit(str[counter])){
+            isDigit = 1;
+        }
+        else{
+            isDigit = 0;
+            print_error(WRONG_ARGUMENTS,"The entered argument is not a number");
+            return isDigit;
+        }
+        ++counter;
+    }
+
+    return isDigit;
+}
+
+void debug(void){
+    printf("####> I havefailed ### \n");
 }
