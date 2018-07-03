@@ -7,6 +7,13 @@
 
 #ifndef UTILITY_H_
 #define UTILITY_H_
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <stdbool.h>
+
 /*  #####################################################################################################################
                                                     MACROS
     ######################################################################################################################
@@ -15,6 +22,7 @@
 
 #define UNKNOWN_COMMAND "UNKNOWN COMMAND "     //unknown command macro
 #define WRONG_ARGUMENTS "WRONG ARGUMENTS "      //wrong arguments macro
+#define FEW_ARGUMENTS "FEW ARGUMENTS "          //few arguments macro
 
 /*
     ######################################################################################################################
@@ -65,6 +73,20 @@ void print_help_menu(void);
     is not a number
 */
 int is_anumber(char str[]);
+
+
+/*
+	function to swap two integers
+	it takes two pointers to integers and interchanges them i.e 'from' is set 'to' and 'to' is set to 'from'
+*/
+void swap(int *from, int *to);
+
+/*
+	function to sort an array of integers in ascending order (bubble sort)
+	it takes an array of integers before sorting
+	it returns the array after sorting in ascending order
+*/
+int *sort_positions(int positions_array[], int size_)
 
 void debug(void);   //to be removed
 

@@ -9,6 +9,10 @@
 #ifndef STRING_UTILITY_H_
 #define STRING_UTILITY_H_
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 /*
     ######################################################################################################################
                                                     FUNCTION PROTOTYPES
@@ -27,12 +31,12 @@ char *reverse_string(char *str);
 char *remove_character(char *str, int position);
 
 /* 	function to remove a series of characters specified in the positions array 'positions[]' 
-    it takes the pointer to a character string 'str' , the number of elements in the positions 
+    it takes the pointer to a character string 'str' , the number of elements in the positions 'positions_size'
 	array and the positions array which contain the positions which are to be removed returns the
 	string 'str' without the characters at 'positions' specified in the positions arry 
     or NULL when str is NULL;
 */
-char *delete_characters(char *str, int positions[], int pos_size);
+char *delete_characters(char *str, int positions[], int positions_size);
 
 /* 	function to replace a specified character from the string with another supplied character 'new_char'
 	returns the string 'str' with the character at 'position' replaced with 'new_char'

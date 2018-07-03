@@ -5,12 +5,8 @@
     File utility.c
 */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-
 #include "utility.h"
+#include "string_utility.h"
 
 
 /* 	function to interprete the commands typed at the terminal
@@ -34,12 +30,25 @@ void command_interpreter(const char *command){
         //do what you want with delete command >> delete <pos1, postn2,....,postnn> from <string>
         strtok((char *)command, " ");           //discard the delete word from the command
 
-        char *postions_string = strtok(NULL, " ");   //extract the positions string "<pos1, postn2,....,postnn>""
+        char *postions_string;
+        char *from_keyword;
+        char *string;
 
-        //********fix this error if only delete is typed
+        //********ensure that the four arguments are provided in the command
+        if((postions_string = strtok(NULL, " ")) == NULL){  //extract the positions string "<pos1, postn2,....,postnn>""
+            print_error((char *)command, FEW_ARGUMENTS);   //print error message
+            return;
+        }
+        if((from_keyword = strtok(NULL, " ")) == NULL){      //extract the from keyword "from"
+            print_error((char *)command, FEW_ARGUMENTS);   //print error message
+            return;
+        }
 
-        char *from_keyword = strtok(NULL, " ");     //extract the from keyword "from"
-        char *string = strtok(NULL," ");           //extract the string from which the characters are to be deleted "<string>"
+        if((string = strtok(NULL, " ")) == NULL){           //extract the string from which the characters are to be deleted "<string>"
+            print_error((char *)command, FEW_ARGUMENTS);   //print error message
+            return;
+        }
+        //****************************************************************
 
         int positions[strlen(postions_string)];   //the array to contain the converted positions from string to int
         char *token;                              //token extracted
@@ -63,8 +72,13 @@ void command_interpreter(const char *command){
                 NEW_LINE;
                 token = strtok(NULL, ",");
             }
+            /* do the deletioin of the characters in the specified positions */
+            int pos_size = (int)(sizeof(positions) / (sizeof(positions[0])));
+           // char *result = delete_characters(string, positions, pos_size);
+            //printf(">> %s", result);NEW_LINE;
+
             for(index = 0; index < 3; ++index){
-                printf(">> %i, ",positions[index]);
+                printf(" >> %i, ",positions[index]);
             }
         }
         else{
@@ -138,6 +152,7 @@ void print_error(char *error_msg, char *error_type){
     it returns 1(true) if all the characters in the string are numbers or 0 (false) if at least one of the characters in the string 
     is not a number
 */
+
 int is_anumber(char *str){
     int counter = 0;
     int isDigit = 0;
@@ -158,6 +173,38 @@ int is_anumber(char *str){
     return isDigit;
 }
 
+/*
+	function to swap two integers
+	it takes two pointers to integers and interchanges them i.e 'from' is set 'to' and 'to' is set to 'from'
+*/
+void swap(int *from, int *to){
+	int temp;			//temporary holder for the value to be swapped
+	temp = *from;
+	*from = *to;
+	*to = temp;
+}
+
+/*
+	function to sort an array of integers in ascending order (bubble sort)
+	it takes an array of integers before sorting
+	it returns the array after sorting in ascending order
+*/
+int *sort_positions(int positions_array[], int size_){
+
+	int outer_counter;		//passes through the positions_array[]
+	int swap_counter;		//for comparing and swapping any two positions
+
+	for(outer_counter = 0; outer_counter < size_; ++outer_counter){	//go through the entire positions_array
+
+		for(swap_counter = 0; swap_counter < size_; ++swap_counter){
+
+			if(positions_array[swap_counter] > positions_array[outer_counter]){
+				swap(&positions_array[swap_counter], &positions_array[outer_counter]);	//swap the two numbers if the next value in the positions_array is greater than the previous
+			}
+		}
+	}
+	return positions_array;
+}
 /* to beremoved */
 void debug(void){
     printf("####> I havefailed ### \n");

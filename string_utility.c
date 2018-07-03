@@ -5,9 +5,7 @@
     File name: string_utility.c
 */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+
 
 #include "string_utility.h"
 
@@ -87,20 +85,39 @@ char *remove_character(char *str, int position){
 }
 
 /* 	function to remove a series of characters specified in the positions array 'positions[]' 
-    it takes the pointer to a character string 'str' , the number of elements in the positions 
+    it takes the pointer to a character string 'str' , the number of elements in the positions 'positions_size'
 	array and the positions array which contain the positions which are to be removed returns the
 	string 'str' without the characters at 'positions' specified in the positions arry 
     or NULL when str is NULL;
 */
-char *delete_characters(char *str, int positions[], int pos_size){
-	
-	int pos = 0;			//the position in the positions[] array
-	/* loop through the string as long as there are more characters in it*/
-	while(pos < pos_size){
+char *delete_characters(char *str, int positions[], int positions_size){
 
-		str = remove_character(str,positions[pos]);
-		++pos;		//go to the next position in the positions[] array
+	if(str == NULL){
+		return NULL;		//if the string 'str' is empty return NULL
 	}
+
+	int length = strlen(str);	//number of characters in the  string 'str'
+	char buffer[length];		//create a buffer of the same size as the string where u want to store the characters that you need
+
+	int index = 0;				//counter to loop through the buffer
+	for(int i = 1; i <= length; ++i){
+		bool keep = true;		//boolean to use to decide whether the character at the specified position is needed or not
+		for(int j = 0; j < positions_size; ++j){
+			if(i == positions[j]){
+				keep = false;	//set keep to false and skip this character if it is at the unwanted position
+				break;
+			}
+		}
+		//if the character at the position i in the str is wanted then copy it to the buffer
+		if(keep){
+			buffer[index] = str[i-1];
+			++index;
+		}
+	}
+
+	buffer[index] = '\0';			//terminate the buffer
+	strcpy(str, buffer);			//copy the buffer back to the string 'str'
+
 	return str;
 }
 
