@@ -22,10 +22,53 @@ void command_interpreter(const char *command){
     }
     /* for doubling a string */
     if(strncmp(command, "double", 6) == 0){
-        //do what u want with the double command
+        /* implement the  double string command double <string> */
+
+        strtok((char *)command, " ");           //discard the double keyword in the command
+
+        /* ensure that the argument <string> is provided */
+        char *string;
+        if((string = strtok(NULL, " ")) == NULL){   //extract the string from the command typed
+            print_error((char *)command, FEW_ARGUMENTS);  //print error message
+            return;
+        }      
+
+        result = (char *)double_string((const char *)string);   //double the string
+
+        if(result != NULL){
+            print_message(result,RESULT);
+
+        }
+        else{
+            print_error("It seems you have not entered the word to double", FEW_ARGUMENTS);
+            return;
+        }
+
     }
     else if(strncmp(command, "reverse", 7) == 0){
-        //do what u want with reverse coomad
+       /* implement the  reverse string command reverse <string> */
+
+        strtok((char *)command, " ");           //discard the revers keyword in the command
+
+        /* ensure that the argument <string> is provided */
+        char *string;
+        if((string = strtok(NULL, " ")) == NULL){   //extract the string from the command typed
+            print_error((char *)command, FEW_ARGUMENTS);  //print error message
+            return;
+        }      
+
+        result = reverse_string(string);   //reverse the string
+
+        if(result != NULL){
+            print_message(result,RESULT);
+
+        }
+        else{
+            print_error("It seems you have not entered the word to reverse", FEW_ARGUMENTS);
+            return;
+        }
+
+
     }
     else if(strncmp(command, "delete", 6) == 0){
         //implement the delete command >> delete <pos1, postn2,....,postnn> from <string>
@@ -78,8 +121,14 @@ void command_interpreter(const char *command){
             sort_positions(positions, pos_size);        //sort the positions array in ascending order
 
             result = delete_characters(string, positions, pos_size);
-            
-            print_message(result, RESULT);
+            if(result != NULL){
+                print_message(result, RESULT);
+
+            }
+            else{
+                print_error("One of the postions you want to delete does not exit in the string provided", WRONG_ARGUMENTS);
+                return;
+            }
         }
         else{
             print_error((char *)command, UNKNOWN_COMMAND);
@@ -87,7 +136,7 @@ void command_interpreter(const char *command){
 
     }
     else if(strncmp(command, "replace", 7) == 0){
-        //implement the replace command replace <pos1-char1, pos2-char2, ....., posn-charn> in <string>
+        /*implement the replace command replace <pos1-char1, pos2-char2, ....., posn-charn> in <string> */
         strtok((char *)command, " ");           //discard the replace word from the command
 
         //some variables
