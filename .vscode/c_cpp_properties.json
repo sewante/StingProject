@@ -4,7 +4,10 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/Program Files/gcc/i686-pc-mingw32/include"
+                "C:/Program Files/gcc/i686-pc-mingw32/include",
+                "C:/Program Files/gcc/include/c++/7.1.0/tr1",
+                "C:/Program Files/gcc/include/c++/7.1.0",
+                "C:/Program Files/gcc/include/c++/7.1.0/i686-pc-mingw32"
             ],
             "defines": [
                 "_DEBUG",

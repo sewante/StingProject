@@ -143,15 +143,15 @@ char *replace_character(char *str, unsigned char new_char, int position){
 	
 	/* loop through the str and identify the character that is to be replaced */
 	while(*str != '\0'){			//as long as the string has more characters
-
 		if(counter != position){
-			buffer[pos++] = *str;	//add the character to the buffer 
+			buffer[pos] = *str;	//add the character to the buffer 
 		}
 		else{
 			buffer[pos] = new_char;		//replace that character at the required position
 		}
 
 		*str++;
+		pos++;
 		counter++;
 	}
 	buffer[pos] = '\0';		//terminate the string
@@ -160,8 +160,29 @@ char *replace_character(char *str, unsigned char new_char, int position){
 	
 	return str;
 }
+/*	function to replace a number of different character in the string at specified positions using the replace_character() function
+	it takes in the string 'str' some of whose characters are to be replaced, an array having the new characters 'new_chars' , the
+	size number of positions 'number_pos' and an array having the positions 'positions'
+	it returns NULL if the string 'str' is null or the string 'str' whose characters at the specified positions have been modified
+*/
+char *replace_characters(char *str, char new_chars[], int positions[], int number_pos){
+	
+	/* check that the string 'str' is empty  */
+	if(str == NULL){
+		return NULL;
+	}
+	
+	int pos = 0;	//position in a string str
+	
+	while(pos < number_pos){
+		str = replace_character(str, new_chars[pos], positions[pos]);	//replace that specific char
+		++pos;
+	}
+	return str;
+}
 
-/* 	function to double the string 'str' 
+/* 	function to double the string 'str'
+	it takes in a string 'str' to be doubled
     it return the string doubled or NULL if the string str supplied is empty ("") or if NULL is passed 
 */
 const char *double_string(const char *str){

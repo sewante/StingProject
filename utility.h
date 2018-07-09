@@ -23,6 +23,8 @@
 #define UNKNOWN_COMMAND "UNKNOWN COMMAND "     //unknown command macro
 #define WRONG_ARGUMENTS "WRONG ARGUMENTS "      //wrong arguments macro
 #define FEW_ARGUMENTS "FEW ARGUMENTS "          //few arguments macro
+#define MESSAGE "MESSAGE "                      //message macro
+#define RESULT "RESULT "                        //the result macro
 
 /*
     ######################################################################################################################
@@ -38,10 +40,10 @@
 void command_interpreter(const char *command);
 
 /* 	function to print a message at the terminal
-    it takes a pointer to the character string to be printed to the screen
+    it takes a pointer to the character string to be printed to the screen and the type of the message
     it ruturns nothing
 */
-void print_message(char *message);
+void print_message(char *message, char *msg_type);
 
 /* 	function to print error message on the terminal 
     it takes a pointer to the character string to be printed to the terminal
@@ -86,7 +88,7 @@ void swap(int *from, int *to);
 	it takes an array of integers before sorting
 	it returns the array after sorting in ascending order
 */
-int *sort_positions(int positions_array[], int size_)
+int *sort_positions(int positions_array[], int size_);
 
 void debug(void);   //to be removed
 

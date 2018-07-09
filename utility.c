@@ -8,6 +8,7 @@
 #include "utility.h"
 #include "string_utility.h"
 
+char *result;       //holds the result after the string has been manipulated
 
 /* 	function to interprete the commands typed at the terminal
     it takes the a pointer to the constant character string to be interpreted
@@ -27,7 +28,7 @@ void command_interpreter(const char *command){
         //do what u want with reverse coomad
     }
     else if(strncmp(command, "delete", 6) == 0){
-        //do what you want with delete command >> delete <pos1, postn2,....,postnn> from <string>
+        //implement the delete command >> delete <pos1, postn2,....,postnn> from <string>
         strtok((char *)command, " ");           //discard the delete word from the command
 
         char *postions_string;
@@ -74,12 +75,11 @@ void command_interpreter(const char *command){
             }
             /* do the deletioin of the characters in the specified positions */
             int pos_size = (int)(sizeof(positions) / (sizeof(positions[0])));
-           // char *result = delete_characters(string, positions, pos_size);
-            //printf(">> %s", result);NEW_LINE;
+            sort_positions(positions, pos_size);        //sort the positions array in ascending order
 
-            for(index = 0; index < 3; ++index){
-                printf(" >> %i, ",positions[index]);
-            }
+            result = delete_characters(string, positions, pos_size);
+            
+            print_message(result, RESULT);
         }
         else{
             print_error((char *)command, UNKNOWN_COMMAND);
@@ -87,9 +87,96 @@ void command_interpreter(const char *command){
 
     }
     else if(strncmp(command, "replace", 7) == 0){
-        //do what you want with replace command
+        //implement the replace command replace <pos1-char1, pos2-char2, ....., posn-charn> in <string>
+        strtok((char *)command, " ");           //discard the replace word from the command
+
+        //some variables
+        char *replacements;         
+        char *in_keyword;
+        char *string;
+
+        char *new_chars_and_pos;        //string that has the position and the char i.e. <pos-char> eg 3-h
+        
+
+        //********ensure that the four arguments are provided in the command
+        if((replacements = strtok(NULL, " ")) == NULL){  //extract the positions string "<pos1-char1, pos2-char2, ....., posn-charn>"
+            print_error((char *)command, FEW_ARGUMENTS);  //print error message
+            return;
+        }
+        if((in_keyword = strtok(NULL, " ")) == NULL){      //extract the from keyword "in"
+            print_error((char *)command, FEW_ARGUMENTS);   //print error message
+            return;
+        }
+
+        if((string = strtok(NULL, " ")) == NULL){           //extract the string from which the characters are to be replaced "<string>"
+            print_error((char *)command, FEW_ARGUMENTS);   //print error message
+            return;
+        }
+        //****************************************************************
+        
+        //ensure that the keyword "in" is present in the command
+        if(strncmp(in_keyword, "in", 2) == 0){
+
+            int number_of_elements = (int)((strlen(replacements) + 1) / 4);     //the number of new characters to replace
+            char new_chars[number_of_elements];                                 //the array to contain the new characters (the new char extracted form <pos-char> eg "h")
+            int positions[number_of_elements];                                  //the position extracted form <pos-char> eg "3"
+
+            /* obtain the individual segments of the position and new char combination ie <pos-char> */
+            char pos_char_tokens[number_of_elements][3];
+            int char_counter,index = 0;
+
+            new_chars_and_pos = strtok(replacements, ",");  //extract the first pos-char combination
+            while(new_chars_and_pos != NULL){
+                
+                for(char_counter = 0; char_counter < 3; ++char_counter){
+                    pos_char_tokens[index][char_counter] = new_chars_and_pos[char_counter];
+                }
+                pos_char_tokens[index][char_counter] = '\0';             //terminate the pos-char combination
+                
+                new_chars_and_pos = strtok(NULL, ",");          //extract another pos-char combination
+                ++index;
+            }
+
+            /*load the new_chars[] array and the positions[] array with their respective contents*/
+            index = 0;
+            char buff[2];       //temporary buffer for containg the "<pos>" to be converted to integer
+            while(index < number_of_elements){
+                /* check if the "<pos>" is a number */
+                if(isdigit(pos_char_tokens[index][0])){
+                    buff[0] = pos_char_tokens[index][0];        //add the "<pos>" to the buff
+                    buff[1] = '\0';                             //terminate the buff
+
+                    positions[index] = atoi(buff);                  //convert the "<pos>" to an integer and load it to the positions[] array
+                    new_chars[index] = pos_char_tokens[index][2];   //add the "<char>" to the new_chars[] array
+
+                }
+                else{
+                    print_error("wrong arguments in the command", WRONG_ARGUMENTS);
+                    return; 
+                }
+                ++index;
+            }
+
+            /* do the replacements of the characters on the string 'str' */
+            result = replace_characters(string, new_chars, positions, number_of_elements);
+            if(result != NULL){
+                print_message(result,RESULT);
+
+            }
+            else{
+                print_error("One of the postions you want to replace does not exit in the string provided", WRONG_ARGUMENTS);
+                return;
+            }
+
+            
+        }
+        else {
+            print_error((char *)command, UNKNOWN_COMMAND);
+        }
+
+
+        
     }
-    
     else if (strncmp(command, "encrypt", 7) == 0){
         //do waht you want with encrypt command
     }
@@ -99,8 +186,7 @@ void command_interpreter(const char *command){
     else if(strcmp(command, "exit") == 0){
         //do what you want with exit command
         NEW_LINE;
-        print_message("Bye...");
-        NEW_LINE;
+        print_message("Bye...", MESSAGE);
         exit(EXIT_SUCCESS);             //exit the program
     }
     //* In case of unsupported command 
@@ -126,12 +212,13 @@ const char *prompt(char buffer[]){
 }
 
 /* 	function to print a message at the terminal
-    it takes a pointer to the character string to be printed to the screen
+    it takes a pointer to the character string to be printed to the screen and the type of the message
     it ruturns nothing
 */
-void print_message(char *message){
+void print_message(char *message, char *msg_type){
     NEW_LINE;
-    printf(" MESSAGE: %s",message);
+    printf(" %s: %s",msg_type, message);
+    NEW_LINE;
 }
 
 /* 	function to print error message on the terminal 

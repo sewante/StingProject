@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /*
     ######################################################################################################################
@@ -44,7 +45,15 @@ char *delete_characters(char *str, int positions[], int positions_size);
 */
 char *replace_character(char *str, unsigned char new_char, int position);
 
-/* 	function to double the string 'str' 
+/*	function to replace a number of different character in the string at specified positions using the replace_character() function
+	it takes in the string 'str' some of whose characters are to be replaced, an array having the new characters 'new_chars' , the
+	size number of positions 'number_pos' and an array having the positions 'positions'
+	it returns NULL if the string 'str' is null or the string 'str' whose characters at the specified positions have been modified
+*/
+char *replace_characters(char *str, char new_chars[], int positions[], int number_pos);
+
+/* 	function to double the string 'str'
+	it takes in a string 'str' to be doubled
     it return the string doubled or NULL if the string str supplied is empty ("") or if NULL is passed 
 */
 const char *double_string(const char *str);

@@ -4,8 +4,6 @@ Acceptable command type
 2. replace <pos1-char1, pos2-char2, .......... , posn-charn> in <string>
 
 
-
-        while(token = strtok(NULL, " ")){
-            print_message(token);
-            NEW_LINE;
-        }
+// LOOPHOLES
+1. assuming the <string> is typed as a single word for now
+2. 
